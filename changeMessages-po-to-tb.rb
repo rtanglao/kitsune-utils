@@ -2,13 +2,14 @@
 # changes messages.po on $stdin from Firefox to Thunderbird and writes output to $stdout
 # cat ../../KITSUNE/LOCALE_CHECKOUT/trunk/locales/de/LC_MESSAGES/messages.po | ./changeMessages-po-to-tb.rb 2>convert.de.messages.stderr.txt 1>thunderbird.de.messages.po
 re_str = [
-  'msgid \"Love Firefox and have a few moments to help?<br /> Help other Firefox users on Twitter. Good things will come to those who tweet!\"',
+  'msgid \"Love Firefox and have a few moments to help\?<br /> Help other Firefox users on Twitter. Good things will come to those who tweet!\"',
   'msgid \"Sign in with <mark>Twitter</mark>\"',
-  'msgid \"Want to go beyond 140 characters\?\"',
+  'msgid \"Want to go beyond 140',
   'msgid \"Firefox Support Home Page\"',
   'msgid \"Need Help With <mark>Firefox\?</mark>\"',
   'msgid \"Firefox Sync Support Home Page\"',
-  'msgid \"Need Help With <mark>Firefox Sync?</mark>\"',
+  'msgid \"Firefox Help for Sync\"',
+  'msgid \"Need Help With <mark>Firefox Sync\?</mark>\"',
   'msgid \"Firefox Help\"',
   'msgid \"Firefox version\"',
   'msgid \"Search the Firefox Support Knowledge Base and Support Forum.\"',
@@ -26,35 +27,29 @@ re_str = [
   '#~ msgid \"SpreadFirefox\"',
   '#~ msgid \"Other Firefox Support\"'
 ]
-messages_po_Array = $stdin.readlines
-re_str.each { |r_str| 
-  re = Regexp.new(r_str)
-  index = messages_po_Array.find_index{|v|v =~ re}
-  if index
-    before = messages_po_Array[index + 1]
-    messages_po_Array[index + 1] = messages_po_Array[index + 1].gsub(/Firefox/,"Thunderbird")
-    $stderr.printf "CHANGED:%s TO:%s\n",before, messages_po_Array[index + 1]
-  end  
-}
+
+$messages_po_Array = []
+
+def change_firefox_to_thunderbird(r_str, msgstr_offset, gsub_regex, gsub_replacement)
+ re = Regexp.new(r_str)
+ index = $messages_po_Array.find_index{|v|v =~ re}
+ if index
+   before = $messages_po_Array[index + msgstr_offset]
+   $messages_po_Array[index + msgstr_offset] = $messages_po_Array[index + msgstr_offset].gsub(Regexp.new(gsub_regex),gsub_replacement)
+   $stderr.printf "CHANGED:%s TO:%s\n",before, $messages_po_Array[index + msgstr_offset]
+ end  
+end
+
+$messages_po_Array = $stdin.readlines
+
+re_str.each { |r_str | change_firefox_to_thunderbird(r_str, 1, 'Firefox', 'Thunderbird') }
 
 # process the exceptions
 # exception 1:   'msgid \"Firefox 4\"' becomes "Thunderbird" NOT Thunderbird 4
-re = Regexp.new('msgid \"Firefox 4\"')
-index = messages_po_Array.find_index{|v|v =~ re}
-if index
-  before = messages_po_Array[index + 1]
-  messages_po_Array[index + 1] = messages_po_Array[index + 1].gsub(/Firefox 4/,"Thunderbird")
-  $stderr.printf "CHANGED:%s TO:%s\n",before, messages_po_Array[index + 1]
-end  
+change_firefox_to_thunderbird('msgid \"Firefox 4\"', 1, 'Firefox 4', 'Thunderbird')
 
 # exception 2: read 2 lines instead of 1 line and then replace Firefox with Thunderbird
 # for: the "kadir topal" msgid
-re = Regexp.new('contact Kadir Topal for more info')
-index = messages_po_Array.find_index{|v|v =~ re}
-if index
-  before = messages_po_Array[index + 2]
-  messages_po_Array[index + 2] = messages_po_Array[index + 2].gsub(/Firefox/,"Thunderbird")
-  $stderr.printf "CHANGED:%s TO:%s\n",before, messages_po_Array[index + 2]
-end  
+change_firefox_to_thunderbird('contact Kadir Topal for more info', 2, 'Firefox', 'Thunderbird')
 
-messages_po_Array.each {|v| puts "#{v}"} 
+$messages_po_Array.each {|v| puts "#{v}"} 
