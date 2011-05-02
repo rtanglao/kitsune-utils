@@ -36,7 +36,7 @@ def change_firefox_to_thunderbird(r_str, msgstr_offset, gsub_regex, gsub_replace
  if index
    before = $messages_po_Array[index + msgstr_offset]
    $messages_po_Array[index + msgstr_offset] = $messages_po_Array[index + msgstr_offset].gsub(Regexp.new(gsub_regex),gsub_replacement)
-   $stderr.printf "CHANGED:%s TO:%s\n",before, $messages_po_Array[index + msgstr_offset]
+   $stderr.printf "CHANGED msgid:%s FROM:%s TO:%s\n",r_str, before, $messages_po_Array[index + msgstr_offset]
  end  
 end
 
@@ -51,5 +51,9 @@ change_firefox_to_thunderbird('msgid \"Firefox 4\"', 1, 'Firefox 4', 'Thunderbir
 # exception 2: read 2 lines instead of 1 line and then replace Firefox with Thunderbird
 # for: the "kadir topal" msgid
 change_firefox_to_thunderbird('contact Kadir Topal for more info', 2, 'Firefox', 'Thunderbird')
+
+# exception 3: msgstr 'Firefox Help' appears twice, the 2nd time with msgctxt "site_title" before the msgstr,
+# 2nd argument is "2" because the order is 'msgctxt site_title'then msgid "Firefox Help" and then the msgstr
+change_firefox_to_thunderbird('msgctxt \"site_title\"',2, 'Firefox', 'Thunderbird')
 
 $messages_po_Array.each {|v| puts "#{v}"} 
