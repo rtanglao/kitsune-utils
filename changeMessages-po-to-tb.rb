@@ -45,14 +45,12 @@ $messages_po_Array = $stdin.readlines
 re_str.each { |r_str | change_firefox_to_thunderbird(r_str, 1, 'Firefox', 'Thunderbird') }
 
 # process the exceptions
-# exception 1:   'msgid \"Firefox 4\"' becomes "Thunderbird" NOT Thunderbird 4
-change_firefox_to_thunderbird('msgid \"Firefox 4\"', 1, 'Firefox 4', 'Thunderbird')
 
-# exception 2: read 2 lines instead of 1 line and then replace Firefox with Thunderbird
+# exception 1: read 2 lines instead of 1 line and then replace Firefox with Thunderbird
 # for: the "kadir topal" msgid
 change_firefox_to_thunderbird('contact Kadir Topal for more info', 2, 'Firefox', 'Thunderbird')
 
-# exception 3: msgstr 'Firefox Help' appears twice, the 2nd time with msgctxt "site_title" before the msgstr,
+# exception 2: msgstr 'Firefox Help' appears twice, the 2nd time with msgctxt "site_title" before the msgstr,
 # 2nd argument is "2" because the order is 'msgctxt site_title'then msgid "Firefox Help" and then the msgstr
 change_firefox_to_thunderbird('msgctxt \"site_title\"',2, 'Firefox', 'Thunderbird')
 
