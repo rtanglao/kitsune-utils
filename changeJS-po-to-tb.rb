@@ -8,5 +8,7 @@ if index
   before = js_po_Array[index + 1]
   js_po_Array[index + 1] = js_po_Array[index + 1].gsub(/Firefox/,"Thunderbird")
   $stderr.printf "Changing:%s to:%s\n",before, js_po_Array[index + 1]
+else
+  $stderr.printf "DID NOT CHANGE:%s\n",before
 end  
 js_po_Array.each {|v| puts "#{v}"} 

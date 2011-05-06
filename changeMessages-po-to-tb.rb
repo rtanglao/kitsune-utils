@@ -37,6 +37,8 @@ def change_firefox_to_thunderbird(r_str, msgstr_offset, gsub_regex, gsub_replace
    before = $messages_po_Array[index + msgstr_offset]
    $messages_po_Array[index + msgstr_offset] = $messages_po_Array[index + msgstr_offset].gsub(Regexp.new(gsub_regex),gsub_replacement)
    $stderr.printf "CHANGED msgid:%s FROM:%s TO:%s\n",r_str, before, $messages_po_Array[index + msgstr_offset]
+ else
+   $stderr.printf("DID NOT CHANGE msgid:%s\n",r_str)
  end  
 end
 
